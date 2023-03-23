@@ -8,10 +8,14 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New() // 得到一个 echo.Echo 的实例
+	// e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
 
 	// 注册路由
 	e.GET("/", func(c echo.Context) error {
