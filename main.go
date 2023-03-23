@@ -27,14 +27,20 @@ func main() {
 		sort.Strings(_tmpArr)
 		newstr := strings.Join(_tmpArr, "")
 		a := sha1.New()
+		n := len(_timestamp) + len(_nonce) + len(_token)
+		var b strings.Builder
+		b.Grow(n)
+		for i := 0; i < len(_tmpArr); i++ {
+			b.WriteString(_tmpArr[i])
+		}
 		a.Write([]byte(newstr))
 		if hex.EncodeToString(a.Sum(nil)) == _signature {
 			return c.String(http.StatusOK, "Hello, World!")
 		} else {
-			return c.String(http.StatusMultipleChoices, "aaa")
+			return c.String(500, "asjkdhaksdh")
 		}
 	})
 
 	// 开启 HTTP Server
-	e.Logger.Fatal(e.Start(":8000"))
+	e.Logger.Fatal(e.Start(":80"))
 }
