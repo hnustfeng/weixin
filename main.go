@@ -22,6 +22,7 @@ func main() {
 		_signature := c.QueryParam("signature")
 		_timestamp := c.QueryParam("timestamp")
 		_nonce := c.QueryParam("nonce")
+		_echostr := c.QueryParam("echostr")
 		_token := "fengfenglovejiangjiang"
 		_tmpArr := []string{_timestamp, _nonce, _token}
 		sort.Strings(_tmpArr)
@@ -35,9 +36,9 @@ func main() {
 		}
 		a.Write([]byte(newstr))
 		if hex.EncodeToString(a.Sum(nil)) == _signature {
-			return c.String(http.StatusOK, "Hello, World!")
+			return c.String(http.StatusOK, _echostr)
 		} else {
-			return c.String(500, "asjkdhaksdh")
+			return c.String(500, "")
 		}
 	})
 
