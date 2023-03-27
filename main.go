@@ -13,9 +13,16 @@ import (
 	"weixin/service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron"
 )
 
 func main() {
+	spec := "0 0 8 * * *" // 每天早晨8:00
+	c := cron.New()
+	c.AddFunc(spec, service.Send)
+	c.Start()
+	fmt.Println("开启定时任务")
+	select {}
 	e := gin.Default() // 得到一个 echo.Echo 的实例
 	// e.Use(middleware.CORS())
 
@@ -46,7 +53,7 @@ func main() {
 
 	e.POST("/", WXMsgReceive)
 	e.GET("/weather", func(c *gin.Context) {
-		data, err := service.GetAir()
+		data, err := service.GetIndices()
 		if err != nil {
 			c.String(500, err.Error())
 		}
@@ -64,6 +71,8 @@ func main() {
 	})
 	// 开启 HTTP Server
 	e.Run(":8000")
+	//weather()
+	//everydaysen()
 }
 
 // WXTextMsg 微信文本消息结构体

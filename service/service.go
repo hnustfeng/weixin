@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nosixtools/solarlunar"
@@ -85,7 +86,7 @@ func GetWeather() (*Weather, error) {
 	return &collectionInfo.Daily[0], nil
 }
 
-func GeIndices() ([]Indices, error) {
+func GetIndices() ([]Indices, error) {
 	WeatherUrl := "https://devapi.qweather.com/v7/indices/1d?type=1,3,5,9,13,16&location=101250204&key=fe3ea7e00fd24669ae28ef3df5178215"
 	resp, err := http.Get(WeatherUrl)
 	if err != nil {
@@ -156,4 +157,16 @@ func GetLove() (int, error) {
 	time, _ := time.ParseInLocation("2006-01-02 15:04:05", "2022-12-02 00:00:00", time.Local)
 	day := int(timenow.Sub(time).Hours() / 24)
 	return day, nil
+}
+
+func GetTalk() (string, error) {
+	indices, err := GetIndices()
+	if err != nil {
+		return "", err
+	}
+	first := indices[3].Text[0:strings.Index(indices[3].Text, "。")]
+	second := indices[1].Text[0:strings.Index(indices[1].Text, "。")]
+	third := indices[4].Text[0:strings.Index(indices[4].Text, "。")]
+	fourth := indices[5].Text
+	return first + "，" + second + "。" + third + "。" + fourth, nil
 }
