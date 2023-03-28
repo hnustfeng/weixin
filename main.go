@@ -18,11 +18,12 @@ import (
 
 func main() {
 	spec := "0 0 8 * * *" // 每天早晨8:00
+	// spec := "*/30 * * * * *"
 	c := cron.New()
 	c.AddFunc(spec, service.Send)
 	c.Start()
 	fmt.Println("开启定时任务")
-	select {}
+	// select {}
 	e := gin.Default() // 得到一个 echo.Echo 的实例
 	// e.Use(middleware.CORS())
 
